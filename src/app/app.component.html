@@ -1,0 +1,50 @@
+<div class="main-container">
+
+  <!-- Banner superior -->
+  <div class="banner">
+    <h1>¡Reta tu memoria y juega!</h1>
+    <p>Selecciona un jugador, elige un nivel y demuestra tu agilidad mental.</p>
+  </div>
+
+  <!-- Pantalla principal -->
+  <div *ngIf="!started" class="section">
+    <button (click)="startGame()">Comenzar</button>
+  </div>
+
+  <!-- Formulario combinado -->
+  <div *ngIf="started && !levelSelected" class="card-box">
+    <!-- Selección de jugador -->
+    <h2>Selecciona un jugador</h2>
+    <div class="select-wrapper">
+      <select id="playerSelect" [(ngModel)]="playerName" (change)="onNameInput(playerName)">
+        <option value="" disabled selected>Selecciona un jugador</option>
+        <option *ngFor="let jugador of jugadoresDisponibles" [value]="jugador.name">
+          {{ jugador.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Registro nuevo -->
+    <div class="divider">o registra un nuevo jugador</div>
+    <div class="register-section">
+      <input type="text" placeholder="Nombre nuevo jugador" [(ngModel)]="nuevoNombreJugador">
+      <input type="password" placeholder="Contraseña (mínimo 8 caracteres)" [(ngModel)]="nuevoPassword">
+      <small class="password-hint">La contraseña debe tener mínimo 8 caracteres.</small>
+      <button class="register-button" (click)="registrarNuevoJugador()">Registrarse</button>
+    </div>
+
+    <!-- Selector de nivel -->
+    <app-level-selector
+      *ngIf="nameEntered"
+      (levelChosen)="onLevelChosen($event)">
+    </app-level-selector>
+  </div>
+  
+  <!-- Juego -->
+  <app-game-board
+    *ngIf="showGameBoard"
+    [level]="selectedLevel"
+    [playerName]="playerName">
+  </app-game-board>
+
+</div>
